@@ -74,7 +74,9 @@ class ZeroShotFilter:
 """
 Eaxmple code for usage
 
-ds = load_dataset("wangrongsheng/ag_news")
+# BBC DATASET
+ds = load_dataset("SetFit/bbc-news")
+# ds = load_dataset("wangrongsheng/ag_news")
 print("Starts!")
 data_split = ds["train"]
 data_text = data_split["text"]
