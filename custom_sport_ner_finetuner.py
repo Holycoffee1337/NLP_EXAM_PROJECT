@@ -7,11 +7,13 @@ from transformers import (
     EarlyStoppingCallback
 )
 import matplotlib.pyplot as plt
-from datasets import load_dataset
+from datasets import DatasetDict, Dataset
 import evaluate
 import numpy as np
 import torch
 import os
+import json
+
 model_checkpoint = "TODO: MODEL"
 tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
 data_collator = DataCollatorForTokenClassification(tokenizer=tokenizer)
@@ -42,9 +44,25 @@ label2id = {
 }
 label_list = [label2id.keys()]
 
-def load_data():
-    # TODO: How to handle custom dataset
-    pass
+def load_data(json_path):
+    with open(json_path, "r") as file:
+        data = json.load(file)
+
+    examples = []
+    for prediction in data["predictions"]:
+        text = data["data"]["text"]
+        tokens, labels = [], []
+        for result in prediction["result"]:
+            start, end = result["value"]["start"], result["value"]["end"]
+            label = result["value"]["labels"][0]
+            tokens.append(text[start:end])
+            labels.append(label)
+        examples.append({"tokens": tokens, "tags": labels})
+
+    # Convert to Hugging Face Dataset
+    dataset = Dataset.from_dict({"tokens": [ex["tokens"] for ex in examples], 
+                                  "tags": [ex["tags"] for ex in examples]})
+    return DatasetDict({"train": dataset})
 
 def tokenize_and_align_labels(examples):
     tokenized_inputs = tokenizer(
