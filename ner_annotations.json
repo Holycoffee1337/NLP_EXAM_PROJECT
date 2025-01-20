@@ -1,0 +1,347 @@
+{
+    "data": {
+        "text": "wales want rugby league training wales could follow england s lead by training with a rugby league club.  england have already had a three-day session with leeds rhinos  and wales are thought to be interested in a similar clinic with rivals st helens. saints coach ian millward has given his approval  but if it does happen it is unlikely to be this season. saints have a week s training in portugal next week  while wales will play england in the opening six nations match on 5 february.  we have had an approach from wales   confirmed a saints spokesman.  it s in the very early stages but it is something we are giving serious consideration to.  st helens  who are proud of their welsh connections  are obvious partners for the welsh rugby union  despite a spat in 2001 over the collapse of kieron cunningham s proposed £500 000 move to union side swansea. a similar cross-code deal that took iestyn harris from leeds to cardiff in 2001 did go through  before the talented stand-off returned to the 13-man code with bradford bulls. kel coslett  who famously moved from wales to league in the 1960s  is currently saints  football manager  while clive griffiths - wales  defensive coach - is a former st helens player and is thought to be the man behind the latest initiative. scott gibbs  the former wales and lions centre  played for st helens from 1994-96 and was in the challenge cup-winning team at wembley in 1996."
+    },
+    "predictions": [
+        {
+            "result": [
+                {
+                    "value": {
+                        "start": 156,
+                        "end": 168,
+                        "text": "leeds rhinos",
+                        "labels": [
+                            "Organization"
+                        ]
+                    },
+                    "id": "ner_0",
+                    "from_name": "label",
+                    "to_name": "text",
+                    "type": "labels"
+                },
+                {
+                    "value": {
+                        "start": 241,
+                        "end": 250,
+                        "text": "st helens",
+                        "labels": [
+                            "Organization"
+                        ]
+                    },
+                    "id": "ner_1",
+                    "from_name": "label",
+                    "to_name": "text",
+                    "type": "labels"
+                },
+                {
+                    "value": {
+                        "start": 252,
+                        "end": 258,
+                        "text": "saints",
+                        "labels": [
+                            "Organization"
+                        ]
+                    },
+                    "id": "ner_2",
+                    "from_name": "label",
+                    "to_name": "text",
+                    "type": "labels"
+                },
+                {
+                    "value": {
+                        "start": 265,
+                        "end": 277,
+                        "text": "ian millward",
+                        "labels": [
+                            "Person"
+                        ]
+                    },
+                    "id": "ner_3",
+                    "from_name": "label",
+                    "to_name": "text",
+                    "type": "labels"
+                },
+                {
+                    "value": {
+                        "start": 358,
+                        "end": 364,
+                        "text": "saints",
+                        "labels": [
+                            "Organization"
+                        ]
+                    },
+                    "id": "ner_4",
+                    "from_name": "label",
+                    "to_name": "text",
+                    "type": "labels"
+                },
+                {
+                    "value": {
+                        "start": 477,
+                        "end": 487,
+                        "text": "5 february",
+                        "labels": [
+                            "Date"
+                        ]
+                    },
+                    "id": "ner_5",
+                    "from_name": "label",
+                    "to_name": "text",
+                    "type": "labels"
+                },
+                {
+                    "value": {
+                        "start": 539,
+                        "end": 545,
+                        "text": "saints",
+                        "labels": [
+                            "Organization"
+                        ]
+                    },
+                    "id": "ner_6",
+                    "from_name": "label",
+                    "to_name": "text",
+                    "type": "labels"
+                },
+                {
+                    "value": {
+                        "start": 649,
+                        "end": 658,
+                        "text": "st helens",
+                        "labels": [
+                            "Organization"
+                        ]
+                    },
+                    "id": "ner_7",
+                    "from_name": "label",
+                    "to_name": "text",
+                    "type": "labels"
+                },
+                {
+                    "value": {
+                        "start": 731,
+                        "end": 748,
+                        "text": "welsh rugby union",
+                        "labels": [
+                            "Organization"
+                        ]
+                    },
+                    "id": "ner_8",
+                    "from_name": "label",
+                    "to_name": "text",
+                    "type": "labels"
+                },
+                {
+                    "value": {
+                        "start": 768,
+                        "end": 772,
+                        "text": "2001",
+                        "labels": [
+                            "Date"
+                        ]
+                    },
+                    "id": "ner_9",
+                    "from_name": "label",
+                    "to_name": "text",
+                    "type": "labels"
+                },
+                {
+                    "value": {
+                        "start": 794,
+                        "end": 811,
+                        "text": "kieron cunningham",
+                        "labels": [
+                            "Person"
+                        ]
+                    },
+                    "id": "ner_10",
+                    "from_name": "label",
+                    "to_name": "text",
+                    "type": "labels"
+                },
+                {
+                    "value": {
+                        "start": 851,
+                        "end": 858,
+                        "text": "swansea",
+                        "labels": [
+                            "Organization"
+                        ]
+                    },
+                    "id": "ner_11",
+                    "from_name": "label",
+                    "to_name": "text",
+                    "type": "labels"
+                },
+                {
+                    "value": {
+                        "start": 896,
+                        "end": 909,
+                        "text": "iestyn harris",
+                        "labels": [
+                            "Person"
+                        ]
+                    },
+                    "id": "ner_12",
+                    "from_name": "label",
+                    "to_name": "text",
+                    "type": "labels"
+                },
+                {
+                    "value": {
+                        "start": 935,
+                        "end": 939,
+                        "text": "2001",
+                        "labels": [
+                            "Date"
+                        ]
+                    },
+                    "id": "ner_13",
+                    "from_name": "label",
+                    "to_name": "text",
+                    "type": "labels"
+                },
+                {
+                    "value": {
+                        "start": 1019,
+                        "end": 1033,
+                        "text": "bradford bulls",
+                        "labels": [
+                            "Organization"
+                        ]
+                    },
+                    "id": "ner_14",
+                    "from_name": "label",
+                    "to_name": "text",
+                    "type": "labels"
+                },
+                {
+                    "value": {
+                        "start": 1035,
+                        "end": 1046,
+                        "text": "kel coslett",
+                        "labels": [
+                            "Person"
+                        ]
+                    },
+                    "id": "ner_15",
+                    "from_name": "label",
+                    "to_name": "text",
+                    "type": "labels"
+                },
+                {
+                    "value": {
+                        "start": 1115,
+                        "end": 1121,
+                        "text": "saints",
+                        "labels": [
+                            "Organization"
+                        ]
+                    },
+                    "id": "ner_16",
+                    "from_name": "label",
+                    "to_name": "text",
+                    "type": "labels"
+                },
+                {
+                    "value": {
+                        "start": 1147,
+                        "end": 1162,
+                        "text": "clive griffiths",
+                        "labels": [
+                            "Person"
+                        ]
+                    },
+                    "id": "ner_17",
+                    "from_name": "label",
+                    "to_name": "text",
+                    "type": "labels"
+                },
+                {
+                    "value": {
+                        "start": 1202,
+                        "end": 1211,
+                        "text": "st helens",
+                        "labels": [
+                            "Organization"
+                        ]
+                    },
+                    "id": "ner_18",
+                    "from_name": "label",
+                    "to_name": "text",
+                    "type": "labels"
+                },
+                {
+                    "value": {
+                        "start": 1278,
+                        "end": 1289,
+                        "text": "scott gibbs",
+                        "labels": [
+                            "Person"
+                        ]
+                    },
+                    "id": "ner_19",
+                    "from_name": "label",
+                    "to_name": "text",
+                    "type": "labels"
+                },
+                {
+                    "value": {
+                        "start": 1312,
+                        "end": 1317,
+                        "text": "lions",
+                        "labels": [
+                            "Organization"
+                        ]
+                    },
+                    "id": "ner_20",
+                    "from_name": "label",
+                    "to_name": "text",
+                    "type": "labels"
+                },
+                {
+                    "value": {
+                        "start": 1337,
+                        "end": 1346,
+                        "text": "st helens",
+                        "labels": [
+                            "Organization"
+                        ]
+                    },
+                    "id": "ner_21",
+                    "from_name": "label",
+                    "to_name": "text",
+                    "type": "labels"
+                },
+                {
+                    "value": {
+                        "start": 1352,
+                        "end": 1359,
+                        "text": "1994-96",
+                        "labels": [
+                            "Date"
+                        ]
+                    },
+                    "id": "ner_22",
+                    "from_name": "label",
+                    "to_name": "text",
+                    "type": "labels"
+                },
+                {
+                    "value": {
+                        "start": 1416,
+                        "end": 1420,
+                        "text": "1996",
+                        "labels": [
+                            "Date"
+                        ]
+                    },
+                    "id": "ner_23",
+                    "from_name": "label",
+                    "to_name": "text",
+                    "type": "labels"
+                }
+            ]
+        }
+    ]
+}
