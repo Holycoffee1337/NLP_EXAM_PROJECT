@@ -10,7 +10,7 @@ model = GLiNER.from_pretrained("EmergentMethods/gliner_medium_news-v2.1")
 dataset = load_dataset("SetFit/bbc-news")
 
 # Define the list of labels (these should match what GLiNER expects)
-labels = ["Person", "Organization", "Place", "Date", "Event", "Product"]
+labels = ["Person", "Player", "Place", "Date", "Organization", "Team", "Score"]
 
 # Extract a sample text for testing
 text = dataset["train"][0]["text"]  # Example text from the dataset
