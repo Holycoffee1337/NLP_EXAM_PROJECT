@@ -13,8 +13,8 @@ dataset = load_dataset("SetFit/bbc-news")
 labels = ["Person", "Player", "Place", "Date", "Organization", "Team", "Score"]
 
 # Input and output file paths
-input_file = "input_texts.txt"  # Text file with one input text per line
-output_file = "ner_annotations.json"  # Output JSON file
+input_file = "NLP_EXAM_PROJECT\sentences.txt"  # Text file with one input text per line
+output_file = "ner_annotations2.json"  # Output JSON file
 
 # Initialize a list to store NER data for all lines
 all_ner_data = []
