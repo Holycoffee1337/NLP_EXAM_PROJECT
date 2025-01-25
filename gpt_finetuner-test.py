@@ -13,6 +13,8 @@ import numpy as np
 import torch
 import json
 import os
+import pandas as pd
+import ast
 
 training_args = {
     "output_dir": "finetuned_model",
@@ -32,7 +34,7 @@ training_args = {
 }
 
 
-def load_data(json_path):
+def load_data_json(json_path):
     with open(json_path, "r") as file:
         data = json.load(file)
 
@@ -85,6 +87,77 @@ def load_data(json_path):
     # Split into train and validation
     dataset = dataset.train_test_split(test_size=0.1, seed=42)  # 90% train, 10% validation
     return DatasetDict({"train": dataset["train"], "validation": dataset["test"]})
+    
+
+def load_data_csv(csv_path):
+    examples = []
+    
+    # Read the CSV using pandas
+    df = pd.read_csv(csv_path)
+
+    for index, row in df.iterrows():
+        text = row["text"]
+        
+        if not text:  # Check if the text is empty
+            print(f"Skipping empty text at row {index}")
+            continue
+
+        try:
+            # Safely evaluate the string as a Python literal (list of dictionaries)
+            annotations = ast.literal_eval(text)
+        except (ValueError, SyntaxError) as e:
+            print(f"Error evaluating string at row {index}: {e}")
+            print(f"Problematic text: {text}")
+            continue
+
+        tokens = []
+        labels = []
+        current_index = 0
+
+        for annotation in annotations:
+            start, end = annotation["start"], annotation["end"]
+            label = annotation["labels"][0]  # Assuming single label for simplicity
+
+            # Add non-entity tokens before the current entity
+            while current_index < start:
+                token = row["text"][current_index:start].strip()
+                if token:
+                    tokens.append(token)
+                    labels.append("O")  # "O" for non-entity tokens
+                current_index = start
+
+            # Add the entity token
+            entity = row["text"][start:end]
+            tokens.append(entity)
+            labels.append(label)
+            current_index = end
+
+        # Add remaining non-entity tokens
+        remaining_text = row["text"][current_index:].strip()
+        if remaining_text:
+            tokens.extend(remaining_text.split())
+            labels.extend(["O"] * len(remaining_text.split()))
+
+        examples.append({"tokens": tokens, "tags": labels})
+
+    # Extract unique labels and add 'O'
+    unique_labels = set(label for ex in examples for label in ex["tags"])
+    unique_labels.add('O')
+    global id2label, label2id
+    id2label = {i: label for i, label in enumerate(sorted(unique_labels))}
+    label2id = {label: i for i, label in id2label.items()}
+
+    # Create Hugging Face Dataset
+    dataset = Dataset.from_dict({
+        "tokens": [ex["tokens"] for ex in examples],
+        "tags": [ex["tags"] for ex in examples]
+    })
+
+    # Split into train and validation
+    dataset = dataset.train_test_split(test_size=0.1, seed=42)  # 90% train, 10% validation
+    return DatasetDict({"train": dataset["train"], "validation": dataset["test"]})
+
+    
 
 
 
@@ -138,8 +211,8 @@ def compute_metrics(predictions_and_labels):
     }
 
 # Dataset Loading
-json_path = "ner_annotations2.json"  # Update with your JSON file path
-dataset = load_data(json_path)
+csv_path = "NLP_EXAM_PROJECT\studio-label-annotation.csv"  # Update with your JSON file path
+dataset = load_data_csv(csv_path)
 
 model_checkpoint = "dslim/bert-base-NER"
 tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
