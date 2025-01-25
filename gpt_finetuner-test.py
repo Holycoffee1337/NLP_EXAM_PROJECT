@@ -14,10 +14,6 @@ import torch
 import json
 import os
 
-model_checkpoint = "TODO: MODEL"
-tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
-data_collator = DataCollatorForTokenClassification(tokenizer=tokenizer)
-
 training_args = {
     "output_dir": "finetuned_model",
     "learning_rate": 2e-5,
@@ -35,37 +31,61 @@ training_args = {
     "save_total_limit": 2,  # How many checkpoints to keep during training.
 }
 
-# Placeholder for label mappings
-id2label = {}
-label2id = {}
-
 
 def load_data(json_path):
     with open(json_path, "r") as file:
         data = json.load(file)
 
     examples = []
-    for prediction in data["predictions"]:
-        text = data["data"]["text"]
-        tokens, labels = [], []
-        for result in prediction["result"]:
+    for entry in data:
+        text = entry["data"]["text"]
+        tokens = []
+        labels = []
+        current_index = 0
+
+        for result in entry["predictions"][0]["result"]:
             start, end = result["value"]["start"], result["value"]["end"]
             label = result["value"]["labels"][0]
-            tokens.append(text[start:end])
+
+            # Add non-entity tokens before the current entity
+            while current_index < start:
+                token = text[current_index:start].strip()
+                if token:
+                    tokens.append(token)
+                    labels.append("O")
+                current_index = start
+
+            # Add the entity token
+            entity = text[start:end]
+            tokens.append(entity)
             labels.append(label)
+            current_index = end
+
+        # Add remaining non-entity tokens
+        remaining_text = text[current_index:].strip()
+        if remaining_text:
+            tokens.extend(remaining_text.split())
+            labels.extend(["O"] * len(remaining_text.split()))
+
         examples.append({"tokens": tokens, "tags": labels})
 
-    # Add 'O' label for non-entity tokens
+    # Extract unique labels and add 'O'
     unique_labels = set(label for ex in examples for label in ex["tags"])
-    unique_labels.add('O')  # Non-entity label
+    unique_labels.add('O')
     global id2label, label2id
     id2label = {i: label for i, label in enumerate(sorted(unique_labels))}
     label2id = {label: i for i, label in id2label.items()}
 
-    # Convert examples to Hugging Face Dataset
-    dataset = Dataset.from_dict({"tokens": [ex["tokens"] for ex in examples],
-                                 "tags": [ex["tags"] for ex in examples]})
-    return DatasetDict({"train": dataset})
+    # Create Hugging Face Dataset
+    dataset = Dataset.from_dict({
+        "tokens": [ex["tokens"] for ex in examples],
+        "tags": [ex["tags"] for ex in examples]
+    })
+
+    # Split into train and validation
+    dataset = dataset.train_test_split(test_size=0.1, seed=42)  # 90% train, 10% validation
+    return DatasetDict({"train": dataset["train"], "validation": dataset["test"]})
+
 
 
 def tokenize_and_align_labels(examples):
@@ -117,16 +137,21 @@ def compute_metrics(predictions_and_labels):
         "accuracy": results["overall_accuracy"],
     }
 
+# Dataset Loading
+json_path = "ner_annotations2.json"  # Update with your JSON file path
+dataset = load_data(json_path)
+
+model_checkpoint = "dslim/bert-base-NER"
+tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
+data_collator = DataCollatorForTokenClassification(tokenizer=tokenizer)
+
 model = AutoModelForTokenClassification.from_pretrained(
     model_checkpoint,
     num_labels=len(id2label),
     id2label=id2label,
-    label2id=label2id
+    label2id=label2id,
+    ignore_mismatched_sizes=True
 )
-
-# Dataset Loading
-json_path = "path_to_your_json_file.json"  # Update with your JSON file path
-dataset = load_data(json_path)
 
 data_collator = DataCollatorForTokenClassification(tokenizer=tokenizer)
 dataset = dataset.map(tokenize_and_align_labels, batched=True)
@@ -140,25 +165,16 @@ args = TrainingArguments(
     push_to_hub=False  # Not using Hugging Face Hub
 )
 
+# Initialize Trainer
 trainer = Trainer(
     model=model,
     args=args,
     train_dataset=dataset["train"],
-    eval_dataset=dataset.get("validation"),  # Optional: Provide validation data if available
+    eval_dataset=dataset["validation"],  # Add validation dataset
     data_collator=data_collator,
     compute_metrics=compute_metrics,
-    callbacks=[EarlyStoppingCallback(early_stopping_patience=3)],
+    callbacks=[EarlyStoppingCallback(early_stopping_patience=3)],  # Optional: Early stopping
 )
-
-# Dataset Stats
-print(f"Training dataset size: {len(dataset['train'])}")
-if "validation" in dataset:
-    print(f"Validation dataset size: {len(dataset['validation'])}")
-
-# Train and Save Results
-train_result = trainer.train()
-trainer.log_metrics("train", train_result.metrics)
-trainer.save_metrics("train", train_result.metrics)
 
 model_save_path = os.path.join(training_args["output_dir"], "model")
 trainer.save_model(model_save_path)
@@ -166,3 +182,15 @@ trainer.save_model(model_save_path)
 # Save Tokenizer
 tokenizer.save_pretrained(model_save_path)
 print(f"Training complete. Model and tokenizer saved!")
+
+# Print dataset sizes
+print(f"Training dataset size: {len(dataset['train'])}")
+print(f"Validation dataset size: {len(dataset['validation'])}")
+
+# Train and save model
+train_result = trainer.train()
+trainer.log_metrics("train", train_result.metrics)
+trainer.save_metrics("train", train_result.metrics)
+trainer.save_model(model_save_path)
+tokenizer.save_pretrained(model_save_path)
+print("Training complete. Model and tokenizer saved!")

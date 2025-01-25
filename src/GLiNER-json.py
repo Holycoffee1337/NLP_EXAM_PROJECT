@@ -1,20 +1,21 @@
 from gliner import GLiNER
-import pandas as pd
-from datasets import load_dataset
 import json
 
 # Load the GLiNER model
 model = GLiNER.from_pretrained("EmergentMethods/gliner_medium_news-v2.1")
 
-# Load the SetFit BBC News dataset
-dataset = load_dataset("SetFit/bbc-news")
+# Define the labels that GLiNER should use during prediction
+labels = ["Person", "Player Name", "Organization", "League", "Team Name", "Location"]
 
-# Define the list of labels (these should match what GLiNER expects)
-labels = ["Person", "Player Name", "Organization", "League", "Team Name", "Location", "Date", "Score"]
-["Person", "Player Name", "Organization", "League", "Team Name", "Location"]
+# Mapping for the BIO standard labels
+bio_label_mapping = {
+    "Team Name": "TEAM",
+    "Player Name": "PLAYR"
+}
+
 # Input and output file paths
-input_file = "NLP_EXAM_PROJECT\sentences.txt"  # Text file with one input text per line
-output_file = "ner_annotations2.json"  # Output JSON file
+input_file = "NLP_EXAM_PROJECT\src\DATA\sentences.txt"  # Text file with one input text per line
+output_file = "NLP_EXAM_PROJECT\src\DATA\gliner_annotations_name.json"  # Output JSON file
 
 # Initialize a list to store NER data for all lines
 all_ner_data = []
@@ -29,6 +30,19 @@ with open(input_file, "r", encoding="utf-8") as f:
         # Predict entities using the GLiNER model
         entities = model.predict_entities(text, labels)
         
+        # Filter entities and remap the labels to match BIO standards
+        filtered_entities = [
+            {
+                **entity,
+                "label": bio_label_mapping[entity["label"]]
+            }
+            for entity in entities if entity["label"] in bio_label_mapping
+        ]
+        
+        # Skip lines with no relevant entities
+        if not filtered_entities:
+            continue
+
         # Prepare the NER data for the current line
         ner_data = {
             "line_number": line_index + 1,  # Track line numbers for reference
@@ -50,7 +64,7 @@ with open(input_file, "r", encoding="utf-8") as f:
                             "to_name": "text",
                             "type": "labels"
                         }
-                        for index, entity in enumerate(entities)
+                        for index, entity in enumerate(filtered_entities)
                     ]
                 }
             ]
@@ -58,8 +72,8 @@ with open(input_file, "r", encoding="utf-8") as f:
         # Add the current line's NER data to the list
         all_ner_data.append(ner_data)
 
-# Save all NER data to a JSON file
+# Save all filtered NER data to a JSON file
 with open(output_file, "w", encoding="utf-8") as f:
     json.dump(all_ner_data, f, ensure_ascii=False, indent=4)
 
-print(f"NER annotations saved to {output_file}")
+print(f"Filtered NER annotations saved to {output_file}")
