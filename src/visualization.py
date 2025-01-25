@@ -51,8 +51,6 @@ df_filtered = pd.read_csv(filtered_csv_path)
 if "original_article" in df_filtered.columns:
     df_filtered.rename(columns={"original_article": "text"}, inplace=True)
 
-# ------------------------------------------------------------------------------
-# STEP 4: Plot top 10 words for the filtered dataset
-# ------------------------------------------------------------------------------
+
 common_words(df_filtered, category_name="Filtered Dataset")
 
