@@ -1,4 +1,4 @@
-content = """# Football Article Analysis Project
+# Football Article Analysis Project
 
 ## 🏟️ Introduction
 This project uses **zero-shot classification** and **visualization** techniques to identify and analyze football-related articles. The goal is to filter, preprocess, and visualize datasets, providing insights into football.
@@ -34,8 +34,18 @@ This project uses **zero-shot classification** and **visualization** techniques 
 - Filters football-related articles using **zero-shot classification**.
 - Saves results to `results_50_advanced.csv`.
 
+### **`results.py`**
+- Similar to `zero.py`, but uses different **candidate labels** and **threshold parameters** for filtering.  
+- Designed for experiments and fine-tuning classification logic.
+
+### **`zero 2 results.py`**
+- Another variation of `zero.py`, optimized for specific **topics** like "Soccer" and "Football."  
+- Saves additional data, including original articles, in `zero_results_with_original_articles.csv`.
+
 ### **`./RESULTS`**
-- Saving all results created from the project 
+- Stores all outputs created by the project:
+  - Filtered datasets.
+  - Visualization plots.
 
 ### **`visualization.py`**
 - Generates **6 visualizations**:
@@ -45,12 +55,10 @@ This project uses **zero-shot classification** and **visualization** techniques 
 
 ---
 
-## 🚀 Usage
-
-(LOOK AT THISS - problably just delete - maybe add env. from conda?)
-
+## 🚀 Usage (Maybe include this??)
 
 ### 1. Install Dependencies
 Make sure to install the required libraries before running the project:
 ```bash
 pip install -r requirements.txt
+
