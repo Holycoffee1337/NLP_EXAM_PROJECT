@@ -3,6 +3,7 @@ File: visualization.py
 Purpose: Functions to visualize results and data,
          including saving common words (with and without stopword removal)
          and word count distribution plots.
+source: Used code from another project: https://github.com/Holycoffee1337/AppliedExam/blob/main/Problem2/visualization.py
 """
 
 import pandas as pd
