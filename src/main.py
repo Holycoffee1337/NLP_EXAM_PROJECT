@@ -35,4 +35,4 @@ if __name__ == "__main__":
 
     ##### Calculate percentage of football articles #####
     # calculate_percentage()
-
+    
